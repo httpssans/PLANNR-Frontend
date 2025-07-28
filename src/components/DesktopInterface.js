@@ -85,43 +85,7 @@ const DesktopInterface = ({
             </div>
           </div>
           
-          <div className="desktop-stats">
-            <div className="stat-card animate-slideInUp" style={{ animationDelay: '0.1s' }}>
-              <span className="stat-number-desktop">{allTasks.length}</span>
-              <span className="stat-label-desktop">Total Tasks</span>
-            </div>
-            <div className="stat-card animate-slideInUp" style={{ animationDelay: '0.2s' }}>
-              <span className="stat-number-desktop">
-                {allTasks.filter(task => {
-                  const { totalSteps, completedSteps } = getTaskProgress(task);
-                  return completedSteps > 0 && completedSteps < totalSteps;
-                }).length}
-              </span>
-              <span className="stat-label-desktop">In Progress</span>
-            </div>
-            <div className="stat-card animate-slideInUp" style={{ animationDelay: '0.3s' }}>
-              <span className="stat-number-desktop">
-                {allTasks.filter(task => {
-                  const { totalSteps, completedSteps } = getTaskProgress(task);
-                  return completedSteps === totalSteps && totalSteps > 0;
-                }).length}
-              </span>
-              <span className="stat-label-desktop">Completed</span>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Premium Main Content */}
-      <main className="premium-main-content">
-        {/* Task Flow Overview */}
-        <section className="desktop-task-flow animate-slideInUp" style={{ animationDelay: '0.4s' }}>
-          <div className="section-header-desktop">
-            <h2 className="section-title-desktop">Task Flow</h2>
-            <p className="section-subtitle-desktop">Your productivity dashboard</p>
-          </div>
-          
-          <div className="desktop-flow-cards">
+          <div className="desktop-header-flow-cards">
             <DesktopTaskCard
               type="previous"
               label="COMPLETED"
@@ -145,8 +109,11 @@ const DesktopInterface = ({
               variant="outline"
             />
           </div>
-        </section>
+        </div>
+      </header>
 
+      {/* Premium Main Content */}
+      <main className="premium-main-content">
         {/* Desktop Layout: Left and Right Columns */}
         <div className="desktop-main-grid">
           {/* Left Column - AI Assistant */}
@@ -310,7 +277,7 @@ const DesktopTaskCard = ({ type, label, task, icon, variant = 'default', feature
     <Card
       variant={variant}
       hover={true}
-      padding="lg"
+      padding="sm"
       className={`desktop-task-card desktop-task-card--${type} ${featured ? 'featured-card' : ''}`}
     >
       <div className="desktop-card-header">
@@ -325,7 +292,6 @@ const DesktopTaskCard = ({ type, label, task, icon, variant = 'default', feature
           </div>
         ) : (
           <div className="desktop-card-empty">
-            <span className="empty-icon">✨</span>
             <span className="empty-text">
               {type === 'previous' && 'No completed tasks yet'}
               {type === 'current' && 'No active tasks'}
@@ -421,8 +387,7 @@ const DesktopTaskItem = ({
   
   return (
     <div 
-      className={`desktop-task-item animate-slideInUp`}
-      style={{ animationDelay: `${animationDelay}s` }}
+      className={`desktop-task-item`}
     >
       <Card
         variant="outline"
@@ -455,7 +420,7 @@ const DesktopTaskItem = ({
         </div>
         
         {isExpanded && (
-          <div className="desktop-task-steps animate-slideInUp">
+          <div className="desktop-task-steps">
             {task.steps.map((step, stepIndex) => (
               <div key={step.id} className="desktop-step-item">
                 <div className="step-content-desktop">
@@ -546,7 +511,7 @@ const DesktopHistorySection = ({ allTasks, getTaskProgress, expandedTasks, toggl
         </div>
         
         {expandedTasks.has('history') && (
-          <div className="desktop-history-tasks animate-slideInUp">
+          <div className="desktop-history-tasks">
             {historyTasks.map((task, index) => (
               <div key={task.id} className="desktop-history-item">
                 <div 

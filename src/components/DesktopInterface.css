@@ -1,18 +1,20 @@
-/* Premium Desktop Interface Styles */
+/* Premium Desktop Interface Styles - No Scroll */
 .premium-desktop-container {
-  min-height: 100vh;
+  height: 100vh;
   background: linear-gradient(135deg, var(--color-neutral-50) 0%, var(--color-primary-50) 100%);
-  overflow-y: auto;
+  overflow: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Desktop Hero Header */
+/* Desktop Hero Header - Compact */
 .desktop-hero-header {
   position: relative;
   background: var(--gradient-primary);
   color: var(--color-neutral-0);
-  padding: var(--space-12) var(--space-8) var(--space-16);
-  margin-bottom: var(--space-10);
+  padding: var(--space-6) var(--space-8) var(--space-8);
+  flex-shrink: 0;
   overflow: hidden;
 }
 
@@ -50,11 +52,11 @@
 .time-display-desktop {
   display: flex;
   flex-direction: column;
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-3);
 }
 
 .current-time-desktop {
-  font-size: var(--font-size-5xl);
+  font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-extrabold);
   line-height: var(--line-height-tight);
   letter-spacing: -0.02em;
@@ -62,108 +64,48 @@
 }
 
 .current-date-desktop {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-medium);
   opacity: 0.8;
-  margin-top: var(--space-2);
+  margin-top: var(--space-1);
 }
 
 .greeting-section-desktop {
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-4);
 }
 
 .greeting-text-desktop {
-  font-size: var(--font-size-4xl);
+  font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
-  margin: 0 0 var(--space-3) 0;
+  margin: 0 0 var(--space-2) 0;
   letter-spacing: -0.01em;
 }
 
 .tagline-desktop {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
   opacity: 0.8;
   margin: 0;
 }
 
-.desktop-stats {
+.desktop-header-flow-cards {
   display: flex;
-  gap: var(--space-6);
+  gap: var(--space-4);
   flex-shrink: 0;
 }
 
-.stat-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: var(--radius-2xl);
-  padding: var(--space-6);
-  text-align: center;
-  min-width: 140px;
-  transition: all var(--transition-base);
-}
-
-.stat-card:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-}
-
-.stat-number-desktop {
-  display: block;
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-extrabold);
-  line-height: var(--line-height-tight);
-  margin-bottom: var(--space-2);
-}
-
-.stat-label-desktop {
-  display: block;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  opacity: 0.8;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Premium Main Content */
+/* Premium Main Content - Flexible */
 .premium-main-content {
+  flex: 1;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 var(--space-8);
-  padding-bottom: var(--space-12);
+  padding: 0 var(--space-3);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
 
-/* Desktop Task Flow Section */
-.desktop-task-flow {
-  margin-bottom: var(--space-12);
-}
-
-.section-header-desktop {
-  text-align: center;
-  margin-bottom: var(--space-10);
-}
-
-.section-title-desktop {
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-neutral-900);
-  margin: 0 0 var(--space-3) 0;
-  letter-spacing: -0.01em;
-}
-
-.section-subtitle-desktop {
-  font-size: var(--font-size-xl);
-  color: var(--color-neutral-600);
-  margin: 0;
-  font-weight: var(--font-weight-normal);
-}
-
-.desktop-flow-cards {
-  display: grid;
-  grid-template-columns: 1fr 1.4fr 1fr;
-  gap: var(--space-8);
-  align-items: start;
-}
 
 /* Desktop Task Cards */
 .desktop-task-card {
@@ -173,23 +115,24 @@
 }
 
 .desktop-task-card.featured-card {
-  transform: scale(1.05);
+  transform: none;
   z-index: 2;
+  border: 2px solid var(--color-primary-500);
 }
 
 .desktop-task-card:hover {
-  transform: translateY(-4px) scale(1.02);
+  transform: translateY(-2px);
 }
 
 .desktop-task-card.featured-card:hover {
-  transform: translateY(-4px) scale(1.08);
+  transform: translateY(-2px);
 }
 
 .desktop-card-header {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  margin-bottom: var(--space-6);
+  gap: var(--space-1);
+  margin-bottom: var(--space-1);
 }
 
 .desktop-card-icon {
@@ -204,7 +147,7 @@
 }
 
 .desktop-card-label {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   color: var(--color-neutral-500);
   text-transform: uppercase;
@@ -217,14 +160,15 @@
 }
 
 .desktop-card-content {
-  min-height: 140px;
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-height: 20px;
 }
 
 .desktop-task-title {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   color: var(--color-neutral-900);
   margin: 0;
@@ -233,25 +177,20 @@
 
 .desktop-task-card.featured-card .desktop-task-title {
   color: var(--color-neutral-0);
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-sm);
 }
 
 .desktop-card-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-8) var(--space-4);
+  justify-content: center;
   text-align: center;
-}
-
-.desktop-card-empty .empty-icon {
-  font-size: var(--font-size-3xl);
-  opacity: 0.6;
+  height: 100%;
 }
 
 .desktop-card-empty .empty-text {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-xs);
   color: var(--color-neutral-500);
   font-weight: var(--font-weight-medium);
 }
@@ -261,27 +200,33 @@
   opacity: 0.8;
 }
 
-/* Desktop Main Grid */
+/* Desktop Main Grid - 65/35 Split */
 .desktop-main-grid {
+  flex: 1;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-8);
-  align-items: start;
+  grid-template-columns: 65fr 35fr;
+  gap: var(--space-6);
+  align-items: stretch;
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* Desktop Left Column - AI Assistant */
 .desktop-left-column {
-  position: sticky;
-  top: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  margin: var(--space-4) 0;
 }
 
 .ai-assistant-card {
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  min-height: 600px;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 .ai-header {
@@ -319,7 +264,8 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 400px;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .desktop-empty-conversation {
@@ -358,10 +304,11 @@
 .desktop-message-stream {
   flex: 1;
   overflow-y: auto;
-  padding: var(--space-4) 0;
+  padding: var(--space-2) 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-3);
+  min-height: 0;
 }
 
 /* Desktop Messages */
@@ -548,14 +495,18 @@
 
 /* Desktop Right Column - Task Management */
 .desktop-right-column {
-  position: sticky;
-  top: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  margin: var(--space-4) 0;
 }
 
 .task-management-card {
-  min-height: 600px;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .tasks-header {
@@ -579,7 +530,8 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 500px;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .desktop-empty-tasks {
@@ -618,10 +570,11 @@
 .tasks-scroll-area {
   flex: 1;
   overflow-y: auto;
-  padding: var(--space-4);
+  padding: var(--space-2);
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-2);
+  min-height: 0;
 }
 
 /* Desktop Task Items */
@@ -882,13 +835,8 @@
     gap: var(--space-8);
   }
   
-  .desktop-stats {
-    gap: var(--space-4);
-  }
-  
-  .stat-card {
-    min-width: 120px;
-    padding: var(--space-4);
+  .desktop-header-flow-cards {
+    gap: var(--space-3);
   }
 }
 
@@ -905,7 +853,7 @@
   
   .desktop-flow-cards {
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-6);
+    gap: var(--space-3);
   }
   
   .desktop-task-card.featured-card {
@@ -913,7 +861,7 @@
   }
   
   .desktop-task-card.featured-card:hover {
-    transform: translateY(-4px) scale(1.02);
+    transform: translateY(-2px);
   }
 }
 
@@ -924,14 +872,10 @@
     gap: var(--space-8);
   }
   
-  .desktop-stats {
+  .desktop-header-flow-cards {
     justify-content: center;
   }
   
-  .desktop-flow-cards {
-    grid-template-columns: 1fr;
-    gap: var(--space-4);
-  }
   
   .current-time-desktop {
     font-size: var(--font-size-4xl);
