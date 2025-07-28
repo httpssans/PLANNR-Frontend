@@ -1,9 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Button from './ui/Button';
+import Card from './ui/Card';
+import '../styles/designSystem.css';
 import './MainScreen.css';
 
 const MainScreen = ({ allTasks, getTaskProgress }) => {
   const navigate = useNavigate();
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [greeting, setGreeting] = useState('');
+  
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+  
+  useEffect(() => {
+    const hour = currentTime.getHours();
+    if (hour < 12) setGreeting('Good morning');
+    else if (hour < 17) setGreeting('Good afternoon');
+    else setGreeting('Good evening');
+  }, [currentTime]);
 
   const getCurrentTask = () => {
     if (allTasks.length === 0) return null;
@@ -95,87 +112,162 @@ const MainScreen = ({ allTasks, getTaskProgress }) => {
   const nextTask = getNextTask();
 
   const handleChatSubmit = (message) => {
-    // Navigate to chat interface with the message
     navigate('/chat', { state: { initialMessage: message } });
+  };
+  
+  const getTaskStatusColor = (task) => {
+    if (!task) return 'neutral';
+    const { totalSteps, completedSteps } = getTaskProgress(task);
+    const progress = completedSteps / totalSteps;
+    if (progress === 1) return 'success';
+    if (progress > 0.5) return 'warning';
+    if (progress > 0) return 'primary';
+    return 'neutral';
+  };
+  
+  const formatTime = (date) => {
+    return date.toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit',
+      hour12: true 
+    });
+  };
+  
+  const formatDate = (date) => {
+    return date.toLocaleDateString('en-US', { 
+      weekday: 'long',
+      month: 'long', 
+      day: 'numeric' 
+    });
   };
 
   return (
     <div className="main-screen">
-      {/* Header */}
-      <header className="mobile-header">
-        <h1 className="mobile-title">PLANNR</h1>
+      {/* Premium Header with Time & Greeting */}
+      <header className="hero-header">
+        <div className="hero-content">
+          <div className="time-display">
+            <span className="current-time">{formatTime(currentTime)}</span>
+            <span className="current-date">{formatDate(currentTime)}</span>
+          </div>
+          <div className="greeting-section">
+            <h1 className="greeting-text animate-slideInUp">{greeting}</h1>
+            <p className="tagline animate-slideInUp">Ready to conquer your day?</p>
+          </div>
+          <div className="quick-stats">
+            <div className="stat-item">
+              <span className="stat-number">{allTasks.length}</span>
+              <span className="stat-label">Total Tasks</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-number">
+                {allTasks.filter(task => {
+                  const { totalSteps, completedSteps } = getTaskProgress(task);
+                  return completedSteps === totalSteps && totalSteps > 0;
+                }).length}
+              </span>
+              <span className="stat-label">Completed</span>
+            </div>
+          </div>
+        </div>
+        <div className="hero-gradient"></div>
       </header>
 
-      {/* Task Cards - Horizontal Layout */}
-      <div className="task-cards-container">
-        {/* Previous Task Card */}
-        <div className="task-card task-card-previous">
-          <div className="task-card-label">PREVIOUS</div>
-          <div className="task-card-content">
-            {previousTask ? (
-              <>
-                <div className="task-card-title">{previousTask.title}</div>
-                <div className="task-card-progress">
-                  {getTaskProgress(previousTask).completedSteps}/{getTaskProgress(previousTask).totalSteps} completed
-                </div>
-              </>
-            ) : (
-              <div className="task-card-empty">No completed tasks</div>
-            )}
-          </div>
+      {/* Premium Task Flow Cards */}
+      <div className="task-flow-section">
+        <div className="section-header">
+          <h2 className="section-title">Task Flow</h2>
+          <p className="section-subtitle">Your journey through productivity</p>
         </div>
+        
+        <div className="task-flow-container">
+          {/* Previous Task Card */}
+          <TaskFlowCard
+            type="previous"
+            label="COMPLETED"
+            task={previousTask}
+            progress={previousTask ? getTaskProgress(previousTask) : null}
+            icon={<CompletedIcon />}
+            variant="glass"
+            className="animate-slideInUp"
+            style={{ animationDelay: '0.1s' }}
+          />
 
-        {/* Current Task Card - Highlighted */}
-        <div className="task-card task-card-current">
-          <div className="task-card-label">CURRENT</div>
-          <div className="task-card-content">
-            {currentTask ? (
-              <>
-                <div className="task-card-title">{currentTask.title}</div>
-                <div className="task-card-progress">
-                  {getTaskProgress(currentTask).completedSteps}/{getTaskProgress(currentTask).totalSteps} steps
-                </div>
-                <div className="task-card-next-step">
-                  Next: {currentTask.steps.find(step => !step.confirmed)?.text || 'All done!'}
-                </div>
-              </>
-            ) : (
-              <div className="task-card-empty">No task in progress</div>
-            )}
-          </div>
-        </div>
+          {/* Current Task Card - Hero */}
+          <TaskFlowCard
+            type="current"
+            label="IN PROGRESS"
+            task={currentTask}
+            progress={currentTask ? getTaskProgress(currentTask) : null}
+            icon={<CurrentIcon />}
+            variant="primary"
+            className="animate-slideInUp task-card-hero"
+            style={{ animationDelay: '0.2s' }}
+            nextStep={currentTask?.steps.find(step => !step.confirmed)?.text}
+          />
 
-        {/* Next Task Card */}
-        <div className="task-card task-card-next">
-          <div className="task-card-label">NEXT</div>
-          <div className="task-card-content">
-            {nextTask ? (
-              <>
-                <div className="task-card-title">{nextTask.title}</div>
-                <div className="task-card-progress">
-                  {getTaskProgress(nextTask).completedSteps}/{getTaskProgress(nextTask).totalSteps} steps ready
-                </div>
-              </>
-            ) : (
-              <div className="task-card-empty">All caught up!</div>
-            )}
-          </div>
+          {/* Next Task Card */}
+          <TaskFlowCard
+            type="next"
+            label="UP NEXT"
+            task={nextTask}
+            progress={nextTask ? getTaskProgress(nextTask) : null}
+            icon={<NextIcon />}
+            variant="outline"
+            className="animate-slideInUp"
+            style={{ animationDelay: '0.3s' }}
+          />
         </div>
       </div>
 
-      {/* CTA Button */}
-      <button 
-        className="view-tasks-button"
-        onClick={() => navigate('/tasks')}
-      >
-        VIEW ALL TASKS
-      </button>
-
-      {/* Chat Input */}
-      <div className="chat-input-section">
-        <div className="chat-input-label">Ask AI to manage your tasks</div>
-        <ChatInput onSubmit={handleChatSubmit} />
+      {/* Action Center */}
+      <div className="action-center animate-slideInUp" style={{ animationDelay: '0.4s' }}>
+        <Button
+          variant="secondary"
+          size="lg"
+          onClick={() => navigate('/tasks')}
+          icon={<TasksIcon />}
+          className="action-button"
+        >
+          View All Tasks
+        </Button>
+        
+        <div className="quick-actions">
+          <Button
+            variant="ghost"
+            size="md"
+            onClick={() => handleChatSubmit('Add a new task')}
+            icon={<PlusIcon />}
+            className="quick-action"
+          >
+            Add Task
+          </Button>
+          
+          <Button
+            variant="ghost"
+            size="md"
+            onClick={() => handleChatSubmit('Show me my progress')}
+            icon={<ProgressIcon />}
+            className="quick-action"
+          >
+            Progress
+          </Button>
+        </div>
       </div>
+
+      {/* AI Assistant Prompt */}
+      <Card variant="glass" className="ai-prompt-card animate-slideInUp" style={{ animationDelay: '0.5s' }}>
+        <div className="ai-prompt-header">
+          <div className="ai-avatar">
+            <AIIcon />
+          </div>
+          <div>
+            <h3 className="ai-prompt-title">AI Assistant</h3>
+            <p className="ai-prompt-subtitle">I'm here to help you stay organized</p>
+          </div>
+        </div>
+        <PremiumChatInput onSubmit={handleChatSubmit} />
+      </Card>
     </div>
   );
 };
@@ -210,5 +302,196 @@ const ChatInput = ({ onSubmit }) => {
     </form>
   );
 };
+
+// Premium Task Flow Card Component
+const TaskFlowCard = ({ 
+  type, 
+  label, 
+  task, 
+  progress, 
+  icon, 
+  variant = 'default',
+  className = '',
+  style = {},
+  nextStep 
+}) => {
+  return (
+    <Card 
+      variant={variant}
+      hover={true}
+      padding="lg"
+      className={`task-flow-card task-flow-card--${type} ${className}`}
+      style={style}
+    >
+      <div className="task-flow-header">
+        <div className="task-flow-icon">{icon}</div>
+        <span className="task-flow-label">{label}</span>
+      </div>
+      
+      <div className="task-flow-content">
+        {task ? (
+          <>
+            <h3 className="task-flow-title">{task.title}</h3>
+            {progress && (
+              <div className="task-flow-progress">
+                <div className="progress-bar">
+                  <div 
+                    className="progress-fill"
+                    style={{ width: `${(progress.completedSteps / progress.totalSteps) * 100}%` }}
+                  />
+                </div>
+                <span className="progress-text">
+                  {progress.completedSteps}/{progress.totalSteps} steps
+                </span>
+              </div>
+            )}
+            {nextStep && (
+              <div className="next-step">
+                <span className="next-step-label">Next:</span>
+                <span className="next-step-text">{nextStep}</span>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="task-flow-empty">
+            <span className="empty-icon">✨</span>
+            <span className="empty-text">
+              {type === 'previous' && 'No completed tasks yet'}
+              {type === 'current' && 'No active tasks'}
+              {type === 'next' && 'All caught up!'}
+            </span>
+          </div>
+        )}
+      </div>
+    </Card>
+  );
+};
+
+// Premium Chat Input Component
+const PremiumChatInput = ({ onSubmit }) => {
+  const [message, setMessage] = React.useState('');
+  const [isExpanded, setIsExpanded] = React.useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (message.trim()) {
+      onSubmit(message.trim());
+      setMessage('');
+      setIsExpanded(false);
+    }
+  };
+
+  const suggestions = [
+    "Add a new project task",
+    "Show me today's priorities", 
+    "Help me plan my week",
+    "What should I focus on?"
+  ];
+
+  return (
+    <div className="premium-chat-input">
+      <form onSubmit={handleSubmit} className="chat-form">
+        <div className={`chat-input-wrapper ${isExpanded ? 'expanded' : ''}`}>
+          <input
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onFocus={() => setIsExpanded(true)}
+            onBlur={() => setTimeout(() => setIsExpanded(false), 200)}
+            placeholder="Ask me anything about your tasks..."
+            className="chat-input"
+          />
+          <Button
+            type="submit"
+            variant="primary"
+            size="sm"
+            disabled={!message.trim()}
+            className="chat-submit"
+          >
+            <SendIcon />
+          </Button>
+        </div>
+      </form>
+      
+      {isExpanded && (
+        <div className="chat-suggestions animate-fadeIn">
+          {suggestions.map((suggestion, index) => (
+            <button
+              key={index}
+              type="button"
+              className="suggestion-pill"
+              onClick={() => {
+                setMessage(suggestion);
+                setIsExpanded(false);
+              }}
+            >
+              {suggestion}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Premium Icons
+const CompletedIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="task-icon">
+    <circle cx="12" cy="12" r="10" fill="currentColor" fillOpacity="0.1"/>
+    <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const CurrentIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="task-icon">
+    <circle cx="12" cy="12" r="10" fill="currentColor" fillOpacity="0.1"/>
+    <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const NextIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="task-icon">
+    <circle cx="12" cy="12" r="10" fill="currentColor" fillOpacity="0.1"/>
+    <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const TasksIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const PlusIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const ProgressIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const AIIcon = () => (
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="ai-icon">
+    <circle cx="12" cy="12" r="10" fill="url(#aiGradient)" fillOpacity="0.1"/>
+    <path d="M9 9h6v6h-6z" fill="url(#aiGradient)" fillOpacity="0.2"/>
+    <path d="M9 9h.01M15 9h.01M9 15h.01M15 15h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    <defs>
+      <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="var(--color-primary-500)"/>
+        <stop offset="100%" stopColor="var(--color-primary-600)"/>
+      </linearGradient>
+    </defs>
+  </svg>
+);
+
+const SendIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 export default MainScreen;

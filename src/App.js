@@ -4,6 +4,7 @@ import MainScreen from './components/MainScreen';
 import TaskListScreen from './components/TaskListScreen';
 import ChatInterface from './components/ChatInterface';
 import DesktopInterface from './components/DesktopInterface';
+import './styles/designSystem.css';
 import './App.css';
 
 // Mock data for AI-generated steps
