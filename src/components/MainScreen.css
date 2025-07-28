@@ -1,0 +1,262 @@
+.main-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f5f5f0;
+  padding: 1rem;
+  gap: 1.5rem;
+}
+
+/* Mobile Header */
+.mobile-header {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.mobile-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+/* Task Cards Container */
+.task-cards-container {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.task-cards-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* Task Card Base Styles */
+.task-card {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: 280px;
+  flex-shrink: 0;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.task-card:active {
+  transform: scale(0.98);
+}
+
+/* Task Card Labels */
+.task-card-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6a6a6a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+/* Task Card Content */
+.task-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.task-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2a2a2a;
+  line-height: 1.4;
+}
+
+.task-card-progress {
+  font-size: 0.85rem;
+  color: #6a6a6a;
+}
+
+.task-card-next-step {
+  font-size: 0.8rem;
+  color: #4a4a4a;
+  font-style: italic;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background-color: #fafaf8;
+  border-radius: 0.375rem;
+  border-left: 3px solid #2a2a2a;
+}
+
+.task-card-empty {
+  font-size: 0.9rem;
+  color: #9a9a9a;
+  font-style: italic;
+  padding: 2rem 0;
+}
+
+/* Task Card Variants */
+.task-card-previous {
+  border: 1px solid #d4d4d4;
+}
+
+.task-card-current {
+  border: 2px solid #2a2a2a;
+  box-shadow: 0 4px 12px rgba(42, 42, 42, 0.15);
+  transform: scale(1.05);
+}
+
+.task-card-current .task-card-label {
+  color: #2a2a2a;
+  font-weight: 700;
+}
+
+.task-card-current .task-card-title {
+  color: #1a1a1a;
+  font-size: 1.1rem;
+}
+
+.task-card-next {
+  border: 1px solid #d4d4d4;
+}
+
+/* CTA Button */
+.view-tasks-button {
+  background-color: #2a2a2a;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(42, 42, 42, 0.2);
+}
+
+.view-tasks-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 4px rgba(42, 42, 42, 0.2);
+}
+
+/* Chat Input Section */
+.chat-input-section {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: auto;
+}
+
+.chat-input-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6a6a6a;
+  text-align: center;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.chat-input-form {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.chat-input-field {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d4d4d4;
+  border-radius: 2rem;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+  background-color: #fafaf8;
+}
+
+.chat-input-field:focus {
+  border-color: #2a2a2a;
+  background-color: #ffffff;
+}
+
+.chat-input-field::placeholder {
+  color: #9a9a9a;
+}
+
+.chat-send-button {
+  background-color: #2a2a2a;
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(42, 42, 42, 0.2);
+}
+
+.chat-send-button:active {
+  transform: scale(0.95);
+}
+
+.send-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .main-screen {
+    padding: 0.75rem;
+    gap: 1rem;
+  }
+  
+  .task-card {
+    min-width: 240px;
+    padding: 1rem;
+  }
+  
+  .task-card-current {
+    transform: scale(1.02);
+  }
+  
+  .mobile-title {
+    font-size: 1.25rem;
+  }
+  
+  .chat-input-section {
+    padding: 1rem;
+  }
+}
+
+/* Ensure proper touch targets */
+@media (pointer: coarse) {
+  .task-card {
+    min-height: 120px;
+  }
+  
+  .view-tasks-button {
+    min-height: 48px;
+  }
+  
+  .chat-send-button {
+    min-width: 48px;
+    min-height: 48px;
+  }
+}
