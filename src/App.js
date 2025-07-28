@@ -1,38 +1,38 @@
+import React, { useState, useRef, useEffect } from "react";
 import './App.css';
-import React, { useState } from "react";
 
 // Mock data for AI-generated steps
 const getStepsForGoal = (goal) => {
   const stepMap = {
-    'learn to play guitar': [
+    '1': [
       'Research guitar basics',
       'Buy a guitar',
       'Take online lessons',
       'Practice daily for 30 minutes',
       'Join a local music group'
     ],
-    'get fit': [
+    '2': [
       'Set fitness goals',
       'Create workout schedule',
       'Join a gym or set up home gym',
       'Start with basic exercises',
       'Track progress weekly'
     ],
-    'learn programming': [
+    '3': [
       'Choose a programming language',
       'Set up development environment',
       'Complete online tutorials',
       'Build practice projects',
       'Join coding community'
     ],
-    'start a business': [
+    '4': [
       'Identify business idea',
       'Conduct market research',
       'Create business plan',
       'Secure funding',
       'Launch minimum viable product'
     ],
-    'learn spanish': [
+    '5': [
       'Install language learning app',
       'Study basic grammar',
       'Practice daily vocabulary',
@@ -75,6 +75,38 @@ function App() {
   const [taskStream, setTaskStream] = useState([]);
   const [allTasks, setAllTasks] = useState([]);
   const [expandedTasks, setExpandedTasks] = useState(new Set());
+  const textareaRef = useRef(null);
+  const inputContainerRef = useRef(null);
+
+  // Auto-resize textarea
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    const container = inputContainerRef.current;
+    
+    if (textarea && container) {
+      // Reset height to calculate scrollHeight
+      textarea.style.height = 'auto';
+      
+      // Get the container height and current content height
+      const containerHeight = container.clientHeight;
+      const titleHeight = 30; // Approximate height of section title
+      const buttonHeight = 44; // Height of submit button
+      const padding = 32; // Total padding
+      const gap = 12; // Gap between elements
+      
+      const availableHeight = containerHeight - titleHeight - buttonHeight - padding - gap;
+      const contentHeight = textarea.scrollHeight;
+      
+      // Set height to content or max available space
+      if (contentHeight <= availableHeight) {
+        textarea.style.height = `${Math.max(contentHeight, 44)}px`;
+        textarea.style.overflowY = 'hidden';
+      } else {
+        textarea.style.height = `${availableHeight}px`;
+        textarea.style.overflowY = 'auto';
+      }
+    }
+  }, [userInput]);
 
   const handleSubmit = (e) => {
     if (e) e.preventDefault();
@@ -96,7 +128,8 @@ function App() {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
       handleSubmit(e);
     }
   };
@@ -325,16 +358,17 @@ function App() {
             </div>
 
             {/* Input Form */}
-            <div className="section input-form-section">
+            <div className="section input-form-section" ref={inputContainerRef}>
               <div className="section-title">user input</div>
               <div className="input-form">
-                <input
-                  type="text"
+                <textarea
+                  ref={textareaRef}
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Enter your goal (e.g., learn to play guitar)..."
                   className="input-field"
+                  rows="1"
                 />
                 <button onClick={handleSubmit} className="submit-button">
                   SUBMIT
@@ -384,7 +418,7 @@ function App() {
                               className="step-text"
                               style={{ 
                                 textDecoration: step.confirmed ? 'line-through' : 'none',
-                                color: step.confirmed ? '#a0aec0' : '#4a5568'
+                                color: step.confirmed ? '#9ca3af' : '#374151'
                               }}
                             >
                               Step {stepIndex + 1}: {step.text}
@@ -444,7 +478,7 @@ function App() {
                       <div 
                         className="task-header" 
                         onClick={() => toggleTaskExpansion('history')}
-                        style={{ backgroundColor: '#f7fafc', fontStyle: 'italic' }}
+                        style={{ backgroundColor: '#f3f4f6', fontStyle: 'italic' }}
                       >
                         <span>History ({historyTasks.length} completed tasks)</span>
                         <span className={`expand-icon ${expandedTasks.has('history') ? 'expanded' : ''}`}>
@@ -458,7 +492,7 @@ function App() {
                               <div 
                                 className="step-text"
                                 style={{ 
-                                  color: '#a0aec0',
+                                  color: '#9ca3af',
                                   textDecoration: 'line-through',
                                   cursor: 'pointer'
                                 }}
@@ -470,7 +504,7 @@ function App() {
                                     {task.steps.map((step, stepIndex) => (
                                       <div key={step.id} style={{ 
                                         fontSize: '0.8rem', 
-                                        color: '#a0aec0',
+                                        color: '#9ca3af',
                                         textDecoration: 'line-through',
                                         marginBottom: '0.25rem'
                                       }}>
