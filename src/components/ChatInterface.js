@@ -282,7 +282,7 @@ const MessageBubble = ({ message, isUser, confirmGoal, index }) => {
             </div>
             <div className="action-buttons">
               <Button
-                variant="success"
+                variant="secondary"
                 size="sm"
                 onClick={() => confirmGoal(message.id, true)}
                 icon={<CheckIcon />}

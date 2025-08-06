@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Button from './ui/Button';
 import Card from './ui/Card';
+import GoogleAuth from './GoogleAuth';
 import '../styles/designSystem.css';
 import './DesktopInterface.css';
 
@@ -73,6 +74,11 @@ const DesktopInterface = ({
         <div className="hero-background">
           <div className="hero-gradient-overlay"></div>
         </div>
+        <div className="header-top-bar-desktop">
+          <div className="auth-section-desktop">
+            <GoogleAuth />
+          </div>
+        </div>
         <div className="hero-content-desktop">
           <div className="desktop-time-section">
             <div className="time-display-desktop">
@@ -106,7 +112,7 @@ const DesktopInterface = ({
               label="UP NEXT"
               task={getNextTask()}
               icon={<NextIcon />}
-              variant="outline"
+              variant="primary"
             />
           </div>
         </div>
@@ -338,7 +344,7 @@ const DesktopMessage = ({ message, confirmGoal, index }) => {
               </div>
               <div className="action-buttons-desktop">
                 <Button
-                  variant="success"
+                  variant="secondary"
                   size="sm"
                   onClick={() => confirmGoal(message.id, true)}
                   icon={<CheckIcon />}

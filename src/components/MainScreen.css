@@ -1,6 +1,7 @@
 /* Premium MainScreen Styles - No Scroll */
 .main-screen {
   height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
   background: linear-gradient(135deg, var(--color-neutral-50) 0%, var(--color-primary-50) 100%);
   padding: 0;
   overflow: hidden;
@@ -17,6 +18,20 @@
   padding: var(--space-4) var(--space-6) var(--space-6);
   flex-shrink: 0;
   overflow: hidden;
+}
+
+/* Header Top Bar with Auth */
+.header-top-bar {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--space-3);
+}
+
+.auth-section {
+  display: flex;
+  align-items: center;
 }
 
 .hero-gradient {
@@ -106,10 +121,10 @@
 
 /* Task Flow Section - Flexible */
 .task-flow-section {
-  flex: 1;
+  flex: 0 0 auto;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--space-4);
+  padding: var(--space-2) var(--space-4);
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -139,10 +154,10 @@
 .task-flow-container {
   display: grid;
   grid-template-columns: 1fr 1.2fr 1fr;
-  gap: var(--space-4);
+  gap: var(--space-3);
   align-items: stretch;
-  flex: 1;
-  min-height: 0;
+  min-height: 120px;
+  max-height: 140px;
 }
 
 /* Task Flow Cards */
@@ -152,16 +167,16 @@
 }
 
 .task-flow-card--current {
-  transform: scale(1.05);
+  transform: scale(1.02);
   z-index: 2;
 }
 
 .task-flow-card:hover {
-  transform: translateY(-4px) scale(1.02);
+  transform: translateY(-2px) scale(1.01);
 }
 
 .task-flow-card--current:hover {
-  transform: translateY(-4px) scale(1.08);
+  transform: translateY(-2px) scale(1.03);
 }
 
 .task-flow-header {
@@ -305,6 +320,58 @@
   opacity: 0.8;
 }
 
+/* Next Task Card Styling */
+.task-flow-card--next {
+  background: linear-gradient(135deg, var(--color-neutral-600) 0%, var(--color-neutral-700) 100%) !important;
+  border: 2px solid var(--color-neutral-500) !important;
+}
+
+.task-flow-card--next .task-flow-icon {
+  color: var(--color-neutral-0);
+}
+
+.task-flow-card--next .task-flow-label {
+  color: var(--color-neutral-0);
+  opacity: 0.8;
+}
+
+.task-flow-card--next .task-flow-title {
+  color: var(--color-neutral-0);
+}
+
+.task-flow-card--next .progress-bar {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.task-flow-card--next .progress-fill {
+  background: var(--color-neutral-0);
+}
+
+.task-flow-card--next .progress-text {
+  color: var(--color-neutral-0);
+  opacity: 0.8;
+}
+
+.task-flow-card--next .empty-text {
+  color: var(--color-neutral-0);
+  opacity: 0.8;
+}
+
+/* View All Tasks Section - New */
+.view-all-tasks-section {
+  text-align: center;
+  margin-top: var(--space-4);
+  padding: 0 var(--space-4);
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+.view-all-tasks-button {
+  min-width: 180px;
+  display: inline-flex;
+}
+
 /* Action Center - Compact */
 .action-center {
   max-width: 1200px;
@@ -333,9 +400,10 @@
 /* AI Prompt Card - Compact */
 .ai-prompt-card {
   max-width: 600px;
-  margin: 0 auto var(--space-4) auto;
+  margin: auto auto var(--space-4) auto;
   padding: var(--space-4);
   flex-shrink: 0;
+  margin-top: auto; /* Push to bottom */
 }
 
 .ai-prompt-header {
@@ -475,8 +543,14 @@
   }
 
   .task-flow-section {
-    padding: 0 var(--space-4);
-    margin-bottom: var(--space-8);
+    padding: var(--space-1) var(--space-4) var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+
+  .task-flow-container {
+    min-height: 50px; /* 50% smaller */
+    max-height: 60px; /* 50% smaller */
+    gap: var(--space-4); /* Increased spacing between cards */
   }
 
   .section-title {
@@ -485,21 +559,62 @@
 
   .task-flow-container {
     grid-template-columns: 1fr;
-    gap: var(--space-4);
+    gap: var(--space-4); /* Maintain spacing between cards */
   }
 
   .task-flow-card--current {
     transform: none;
     order: -1;
   }
+  
+  /* Make task cards 50% smaller on mobile */
+  .task-flow-card {
+    padding: var(--space-2); /* Reduced padding */
+  }
+  
+  .task-flow-header {
+    margin-bottom: var(--space-2); /* Reduced margin */
+  }
+  
+  .task-flow-title {
+    font-size: var(--font-size-sm); /* Smaller title */
+    margin-bottom: var(--space-1); /* Reduced margin */
+  }
+  
+  .task-flow-card--current .task-flow-title {
+    font-size: var(--font-size-base); /* Smaller current task title */
+  }
+  
+  .task-flow-content {
+    min-height: 40px; /* Reduced content height */
+  }
+  
+  .progress-text {
+    font-size: var(--font-size-xs); /* Smaller progress text */
+  }
+  
+  /* View All Tasks section on mobile */
+  .view-all-tasks-section {
+    display: block !important;
+    margin-top: var(--space-3);
+    padding: 0 var(--space-4);
+    text-align: center;
+    position: relative;
+    z-index: 10;
+  }
+  
+  .view-all-tasks-button {
+    min-width: 160px;
+    font-size: var(--font-size-sm);
+    display: inline-flex !important;
+  }
 
   .action-center {
-    padding: 0 var(--space-4);
-    margin-bottom: var(--space-8);
+    display: none; /* Hide the entire action center on mobile */
   }
 
   .quick-actions {
-    gap: var(--space-3);
+    display: none; /* Hide Add Task and Progress buttons on mobile */
   }
 
   .quick-action {
@@ -508,8 +623,11 @@
   }
 
   .ai-prompt-card {
-    margin: 0 var(--space-4) var(--space-6) var(--space-4);
+    margin: auto var(--space-4) var(--space-6) var(--space-4);
     padding: var(--space-4);
+    margin-top: auto; /* Ensure it stays at bottom on mobile */
+    /* Handle safe area insets for mobile devices */
+    margin-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0));
   }
 
   .ai-prompt-header {
@@ -545,16 +663,60 @@
   }
 
   .task-flow-section {
+    padding: var(--space-1) var(--space-3) var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+
+  .task-flow-container {
+    min-height: 45px; /* 50% smaller */
+    max-height: 55px; /* 50% smaller */
+    gap: var(--space-3); /* Proper spacing between cards */
+  }
+
+  /* Make task cards even smaller on small mobile */
+  .task-flow-card {
+    padding: var(--space-1-5); /* Even smaller padding */
+  }
+  
+  .task-flow-header {
+    margin-bottom: var(--space-1-5); /* Reduced margin */
+  }
+  
+  .task-flow-title {
+    font-size: var(--font-size-xs); /* Even smaller title */
+    margin-bottom: var(--space-1); /* Reduced margin */
+  }
+  
+  .task-flow-card--current .task-flow-title {
+    font-size: var(--font-size-sm); /* Smaller current task title */
+  }
+  
+  .task-flow-content {
+    min-height: 35px; /* Further reduced content height */
+  }
+  
+  /* View All Tasks section on small mobile */
+  .view-all-tasks-section {
+    display: block !important;
+    margin-top: var(--space-2);
     padding: 0 var(--space-3);
+    text-align: center;
+    position: relative;
+    z-index: 10;
+  }
+  
+  .view-all-tasks-button {
+    min-width: 140px;
+    font-size: var(--font-size-xs);
+    display: inline-flex !important;
   }
 
   .action-center {
-    padding: 0 var(--space-3);
+    display: none; /* Hide the entire action center on small mobile */
   }
 
   .quick-actions {
-    flex-direction: column;
-    align-items: center;
+    display: none; /* Hide Add Task and Progress buttons on small mobile */
   }
 
   .quick-action {
@@ -563,7 +725,10 @@
   }
 
   .ai-prompt-card {
-    margin: 0 var(--space-3) var(--space-4) var(--space-3);
+    margin: auto var(--space-3) var(--space-4) var(--space-3);
+    margin-top: auto; /* Ensure it stays at bottom on small mobile */
+    /* Handle safe area insets for small mobile devices */
+    margin-bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0));
   }
 
   .chat-suggestions {
@@ -595,6 +760,18 @@
   .quick-action,
   .action-button {
     min-height: 48px;
+  }
+  
+  /* Mobile-specific viewport handling */
+  .main-screen {
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height */
+    min-height: -webkit-fill-available; /* iOS Safari fallback */
+  }
+  
+  .ai-prompt-card {
+    margin-top: auto; /* Force to bottom on touch devices */
+    margin-bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0));
   }
 }
 

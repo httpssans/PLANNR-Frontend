@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from './ui/Button';
 import Card from './ui/Card';
+import GoogleAuth from './GoogleAuth';
 import '../styles/designSystem.css';
 import './MainScreen.css';
 
@@ -145,6 +146,11 @@ const MainScreen = ({ allTasks, getTaskProgress }) => {
     <div className="main-screen">
       {/* Premium Header with Time & Greeting */}
       <header className="hero-header">
+        <div className="header-top-bar">
+          <div className="auth-section">
+            <GoogleAuth />
+          </div>
+        </div>
         <div className="hero-content">
           <div className="time-display">
             <span className="current-time">{formatTime(currentTime)}</span>
@@ -154,31 +160,12 @@ const MainScreen = ({ allTasks, getTaskProgress }) => {
             <h1 className="greeting-text animate-slideInUp">{greeting}</h1>
             <p className="tagline animate-slideInUp">Ready to conquer your day?</p>
           </div>
-          <div className="quick-stats">
-            <div className="stat-item">
-              <span className="stat-number">{allTasks.length}</span>
-              <span className="stat-label">Total Tasks</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-number">
-                {allTasks.filter(task => {
-                  const { totalSteps, completedSteps } = getTaskProgress(task);
-                  return completedSteps === totalSteps && totalSteps > 0;
-                }).length}
-              </span>
-              <span className="stat-label">Completed</span>
-            </div>
-          </div>
         </div>
         <div className="hero-gradient"></div>
       </header>
 
       {/* Premium Task Flow Cards */}
       <div className="task-flow-section">
-        <div className="section-header">
-          <h2 className="section-title">Task Flow</h2>
-          <p className="section-subtitle">Your journey through productivity</p>
-        </div>
         
         <div className="task-flow-container">
           {/* Previous Task Card */}
@@ -213,25 +200,28 @@ const MainScreen = ({ allTasks, getTaskProgress }) => {
             task={nextTask}
             progress={nextTask ? getTaskProgress(nextTask) : null}
             icon={<NextIcon />}
-            variant="outline"
+            variant="primary"
             className="animate-slideInUp"
             style={{ animationDelay: '0.3s' }}
           />
+        </div>
+        
+        {/* View All Tasks Button - Moved after task cards */}
+        <div className="view-all-tasks-section animate-slideInUp" style={{ animationDelay: '0.4s' }}>
+          <Button
+            variant="secondary"
+            size="lg"
+            onClick={() => navigate('/tasks')}
+            icon={<TasksIcon />}
+            className="view-all-tasks-button"
+          >
+            View All Tasks
+          </Button>
         </div>
       </div>
 
       {/* Action Center */}
       <div className="action-center animate-slideInUp" style={{ animationDelay: '0.4s' }}>
-        <Button
-          variant="secondary"
-          size="lg"
-          onClick={() => navigate('/tasks')}
-          icon={<TasksIcon />}
-          className="action-button"
-        >
-          View All Tasks
-        </Button>
-        
         <div className="quick-actions">
           <Button
             variant="ghost"

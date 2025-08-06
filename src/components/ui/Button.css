@@ -1,3 +1,23 @@
+/* Google Auth Button Custom Styles */
+.google-auth-btn {
+  background: var(--color-neutral-0);
+  border-color: var(--color-neutral-300);
+  color: var(--color-neutral-900);
+  transition: all var(--transition-base);
+}
+
+.google-auth-btn:hover:not(.btn--disabled) {
+  background: var(--color-neutral-50);
+  border-color: var(--color-neutral-400);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.google-auth-btn:active:not(.btn--disabled) {
+  transform: translateY(0);
+  background: var(--color-neutral-100);
+}
+
 /* Premium Button Component */
 .btn {
   display: inline-flex;

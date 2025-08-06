@@ -33,8 +33,8 @@
 }
 
 .card--outline {
-  background: transparent;
-  border: 2px solid var(--color-neutral-300);
+  background: var(--color-neutral-0);
+  border: 2px solid var(--color-neutral-700);
   box-shadow: none;
 }
 

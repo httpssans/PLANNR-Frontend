@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { v4 as uuidv4 } from 'uuid';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainScreen from './components/MainScreen';
 import TaskListScreen from './components/TaskListScreen';
@@ -133,7 +134,7 @@ function App() {
     
     // Add goal confirmation to task stream
     const goalConfirmation = {
-      id: Date.now(),
+      id: uuidv4(),
       type: 'goal',
       text: `TASK: ${goalText}`,
       originalGoal: goalText,
@@ -162,7 +163,7 @@ function App() {
           title: goalItem.originalGoal,
           steps: steps.map((step, index) => ({
             id: Date.now() + index + 1,
-            text: step,
+            text: step, //text: step,
             confirmed: false
           })),
           completedSteps: []
