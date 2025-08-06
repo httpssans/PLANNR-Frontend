@@ -1,16 +1,75 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
+import Cookies from 'js-cookie';
 import Button from './ui/Button';
+import { apiService } from '../services/api';
 
 const GoogleAuthButton = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+  const [isVerifying, setIsVerifying] = useState(false);
+
+  useEffect(() => {
+    const authToken = Cookies.get('google_auth_token');
+    const userData = Cookies.get('user_data');
+    
+    if (authToken && userData) {
+      setIsLoggedIn(true);
+      setUserInfo(JSON.parse(userData));
+    }
+  }, []);
+
   const login = useGoogleLogin({
-    onSuccess: credentialResponse => {
-      console.log(credentialResponse);
+    onSuccess: async (credentialResponse) => {
+      try {
+        setIsVerifying(true);
+        const { access_token } = credentialResponse;
+        
+        // Fetch user info from Google API
+        const userResponse = await fetch(`https://www.googleapis.com/oauth2/v2/userinfo?access_token=${access_token}`);
+        const userData = await userResponse.json();
+        
+        // Verify with backend
+        const backendResponse = await apiService.verifyGoogleAuth(access_token, userData);
+        
+        if (backendResponse.success || backendResponse.verified) {
+          // Store tokens and user data in cookies
+          Cookies.set('google_auth_token', access_token, { expires: 7, secure: true });
+          Cookies.set('user_data', JSON.stringify(userData), { expires: 7, secure: true });
+          Cookies.set('backend_session', backendResponse.session_id || 'verified', { expires: 7, secure: true });
+          
+          setIsLoggedIn(true);
+          setUserInfo(userData);
+          
+          console.log('Login and verification successful:', userData);
+        } else {
+          console.error('Backend verification failed:', backendResponse);
+          throw new Error('Backend verification failed');
+        }
+      } catch (error) {
+        console.error('Error during authentication:', error);
+        // Clear any partial auth state
+        Cookies.remove('google_auth_token');
+        Cookies.remove('user_data');
+        Cookies.remove('backend_session');
+      } finally {
+        setIsVerifying(false);
+      }
     },
     onError: () => {
       console.log('Login Failed');
+      setIsVerifying(false);
     }
   });
+
+  const logout = () => {
+    Cookies.remove('google_auth_token');
+    Cookies.remove('user_data');
+    Cookies.remove('backend_session');
+    setIsLoggedIn(false);
+    setUserInfo(null);
+    console.log('Logged out successfully');
+  };
 
   const GoogleIcon = () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -30,6 +89,22 @@ const GoogleAuthButton = () => {
     </svg>
   );
 
+  if (isLoggedIn && userInfo) {
+    return (
+      <div className="user-profile">
+        <span>Welcome, {userInfo.name}</span>
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={logout}
+          style={{ marginLeft: '8px' }}
+        >
+          Sign out
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <Button
       variant="secondary"
@@ -37,8 +112,9 @@ const GoogleAuthButton = () => {
       onClick={() => login()}
       icon={<GoogleIconBW />}
       className="google-auth-btn"
+      disabled={isVerifying}
     >
-      Sign in
+      {isVerifying ? 'Verifying...' : 'Sign in'}
     </Button>
   );
 };
